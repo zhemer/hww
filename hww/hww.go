@@ -26,10 +26,11 @@ const (
 )
 
 var (
-        sParPort        = flag.String("listen-port", "8080", "The port to listen on for HTTP requests.")
-        iParRefresh	= flag.Int("refresh-interval", 30, "Interval for front page refreshes (0=disable)")
-        iParRequestLog	= flag.Int("request-log", 1, "Log request to console (0=disable)")
+	sParPort        = flag.String("listen-port", "8080", "The port to listen on for HTTP requests.")
+	iParRefresh	= flag.Int("refresh-interval", 30, "Interval for front page refreshes (0=disable)")
+	iParRequestLog	= flag.Int("request-log", 1, "Log request to console (0=disable)")
 )
+
 var stCpu tCpuData
 var saUrls = []string{sUrlVars, sUrlHealth, sUrlStatus, sUrlHealthInvert}
 var pageTop = "<html><head>%s<title>Hello World by Go lang</title></head><body><h1>Hello World from Go!</h1><p>Available end points: "
@@ -38,10 +39,21 @@ var aiCpuData [7]int
 var tiStarted time.Time
 var iStatHealth = true
 var iStatReady = false
-
+var sHelp = `Application end points:
+- /                     main front page
+- /varz                 CPU usage
+- /healthz              application health state
+- /statusz              application ready state
+- /healthzInvert        inverts health state`
 
 func main() {
 	tiStarted = time.Now()
+	flag.Usage = func() {
+        fmt.Fprintf(flag.CommandLine.Output(), "Simple http server that exposes CPU usage to world\n")
+        fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s:\n", os.Args[0])
+        flag.PrintDefaults()
+        fmt.Fprintf(flag.CommandLine.Output(), "\n" + sHelp)
+	}
 	flag.Parse()
 	if *iParRefresh > 0 {
 		pageTop = fmt.Sprintf(pageTop, "<meta http-equiv=refresh content=" + strconv.Itoa(*iParRefresh) +">")
@@ -87,6 +99,10 @@ func main() {
 		log.Fatal("Failed to start server", err)
 		iStatHealth, iStatReady = false, false
 	}
+}
+
+
+var Usage = func() {
 }
 
 
