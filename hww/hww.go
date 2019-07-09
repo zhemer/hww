@@ -34,7 +34,6 @@ var stCpu tCpuData
 var saUrls = []string{sUrlVars, sUrlHealth, sUrlStatus, sUrlHealthInvert}
 var pageTop = "<html><head>%s<title>Hello World by Go lang</title></head><body><h1>Hello World from Go!</h1><p>Available end points: "
 var pageBottom = "</body></html>"
-var aiCpuData [7]int
 var tiStarted time.Time
 var iStatHealth = true
 var iStatReady = false
