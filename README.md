@@ -26,3 +26,53 @@ Application end points:
 - /statusz              application ready state
 - /healthzInvert        inverts health state
 ```
+Use cases
+
+```console
+$ curl -i localhost:8080/varz
+HTTP/1.1 200 OK
+Date: Tue, 09 Jul 2019 08:29:15 GMT
+Content-Length: 99
+Content-Type: text/plain; charset=utf-8
+
+hww_user 0
+hww_nice 0
+hww_system 0
+hww_idle 99
+hww_iowait 0
+hww_uptime 48
+hww_health 1
+hww_ready 1
+
+$ curl -i localhost:8080/healthz
+HTTP/1.1 200 OK
+Date: Tue, 09 Jul 2019 08:29:44 GMT
+Content-Length: 2
+Content-Type: text/plain; charset=utf-8
+
+ok
+
+$ curl -i localhost:8080/statusz
+HTTP/1.1 200 OK
+Date: Tue, 09 Jul 2019 08:30:25 GMT
+Content-Length: 5
+Content-Type: text/plain; charset=utf-8
+
+ready
+
+$ curl -i localhost:8080/healthzInvert
+HTTP/1.1 200 OK
+Date: Tue, 09 Jul 2019 08:31:03 GMT
+Content-Length: 40
+Content-Type: text/plain; charset=utf-8
+
+Health status changed from true to false
+
+$ curl -i localhost:8080/healthz
+HTTP/1.1 500 Internal Server Error
+Date: Tue, 09 Jul 2019 08:31:09 GMT
+Content-Length: 5
+Content-Type: text/plain; charset=utf-8
+
+error
+```
