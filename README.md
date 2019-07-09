@@ -1,7 +1,7 @@
 # hww - Hello World Web http server
 
-Hww is a simple http server written in Go, that gathers a container CPU usage and offers it as end point for Prometheus that can be seen further in Grafana dashboard.
-Whole system is consist of three Docker containers, that can be started with single docker-compose.yml file:
+Hww is a simple http server written in Go, that gathers a container CPU usage and offers it as end points for Prometheus that can be seen further in Grafana dashboard.
+Whole system consists of three Docker containers, that can be started with single docker-compose.yml file:
 
 ```console
 $ docker-compose up -d
