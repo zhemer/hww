@@ -3,10 +3,13 @@
 Hww is a simple http server written in Go, that gathers a container CPU usage and offers it as end point for Prometheus that can be seen further in Grafana dashboard.
 Whole system is consist of three Docker containers, that can be started with single docker-compose.yml file:
 
+```console
 $ docker-compose up -d
+```
 
 One container is the server, two overs are Promeheus and Grafana containers. All containers can be accessed on apropriate ports, specified by container's 'ports' directive.
 
+```console
 $ ./hww -h
 Simple http server that exposes CPU usage to world
 Usage of ./hww:
@@ -22,3 +25,4 @@ Application end points:
 - /healthz              application health state
 - /statusz              application ready state
 - /healthzInvert        inverts health state
+```
