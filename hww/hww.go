@@ -102,10 +102,6 @@ func main() {
 }
 
 
-var Usage = func() {
-}
-
-
 func RunCommand(sCmd string) string {
 	sOut, err := exec.Command(sCmd).Output()
 	if err != nil {
@@ -173,8 +169,8 @@ func getCpuLoad() {
 
 
 func Bool2Int(b bool) int {
-    if b {
-        return 1
-    }
-    return 0
- }
+	if b {
+	    return 1
+	}
+	return 0
+}
