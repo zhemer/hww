@@ -1,0 +1,279 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  prometheus.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus:9090
+        basicAuth: false
+metadata:
+  name: cm-graf-datasource
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana:6.2.5
+      # - command:
+      #   - /setup.sh
+        env:
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          value: admin
+        - name: GF_SECURITY_ADMIN_USER
+          value: admin
+        - name: GF_USERS_ALLOW_SIGN_UP
+          value: "false"
+        ports:
+        - containerPort: 3000
+        # lifecycle:
+        #   postStart:
+        #     exec:
+        #       command: ["/bin/sh", "-c", "curl -i -H 'Accept: application/json' -H 'Content-Type: application/json' -X POST -k http://admin:admin@localhost:3000/api/dashboards/db --data @/etc/grafana/provisioning/dashboards/hww_app.json"]
+        resources: {}
+
+        volumeMounts:
+          - name: vm-cm-graf-dashboards
+            mountPath: /etc/grafana/provisioning/dashboards/dashboards.yaml
+            subPath: dashboards.yaml
+          - name: vm-cm-graf-dashboard
+            mountPath: /etc/grafana/provisioning/dashboards/hww_app.json
+            subPath: hww_app.json
+          - name: vm-cm-graf-datasource
+            mountPath: /etc/grafana/provisioning/datasources/prometheus.yaml
+            subPath: prometheus.yaml
+
+        # - mountPath: /var/lib/grafana
+        #   name: grafana-data
+
+      restartPolicy: Always
+
+      volumes:
+        - name: vm-cm-graf-dashboards
+          configMap:
+            name: cm-graf-dashboards
+        - name: vm-cm-graf-dashboard
+          configMap:
+            name: cm-graf-dashboard
+        - name: vm-cm-graf-datasource
+          configMap:
+            name: cm-graf-datasource
+
+      # - name: grafana-data
+      #   persistentVolumeClaim:
+      #     claimName: grafana-data
+
+status: {}
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+data:
+  hww_app.json: |
+    {"dashboard": {
+      "id": null,
+      "title": "CPU usage stats measured by hww application",
+      "timezone": "utc",
+      "annotations": {
+        "list": []
+      },
+      "refresh": "5s",
+      "editable": true,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "links": [],
+      "panels": [
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Prometheus",
+          "decimals": 2,
+          "editable": true,
+          "error": false,
+          "fill": 4,
+          "grid": {},
+          "gridPos": {
+            "h": 7,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 2,
+          "interval": "",
+          "isNew": true,
+          "legend": {
+            "alignAsTable": true,
+            "avg": true,
+            "current": true,
+            "max": true,
+            "min": false,
+            "rightSide": true,
+            "show": true,
+            "total": false,
+            "values": true
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "options": {},
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "hww_iowait",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "iowait",
+              "refId": "A"
+            },
+            {
+              "expr": "hww_nice",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "nice",
+              "refId": "B"
+            },
+            {
+              "expr": "hww_user",
+              "format": "time_series",
+              "intervalFactor": 1,
+              "legendFormat": "user",
+              "refId": "C"
+            },
+            {
+              "expr": "hww_system",
+              "format": "time_series",
+              "intervalFactor": 1,
+              "legendFormat": "system",
+              "refId": "D"
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "CPU Usage",
+          "tooltip": {
+            "msResolution": true,
+            "shared": true,
+            "sort": 2,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "percent",
+              "label": null,
+              "logBase": 1,
+              "max": 100,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        }
+      ],
+      "schemaVersion": 18,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-15m",
+        "to": "now"
+      },
+      "timepicker": {
+        "refresh_intervals": [
+          "5s",
+          "10s",
+          "30s",
+          "1m",
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "2h",
+          "1d"
+        ],
+        "time_options": [
+          "5m",
+          "15m",
+          "1h",
+          "6h",
+          "12h",
+          "24h",
+          "2d",
+          "7d",
+          "30d"
+        ]
+      },
+      "version": 2
+    }
+    }
+metadata:
+  name: cm-graf-dashboard
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+data:
+  dashboards.yaml: |
+      apiVersion: 1
+      providers:
+      - name: 'default'       # name of this dashboard configuration (not dashboard itself)
+        org_id: 1             # id of the org to hold the dashboard
+        folder: ''            # name of the folder to put the dashboard (http://docs.grafana.org/v5.0/reference/dashboard_folders/)
+        type: 'file'          # type of dashboard description (json files)
+        options:
+          folder: '/etc/grafana/provisioning/dashboards'
+metadata:
+  name: cm-graf-dashboards
