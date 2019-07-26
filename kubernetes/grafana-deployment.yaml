@@ -21,7 +21,7 @@ metadata:
   labels:
     app: grafana
 spec:
-  replicas: 1
+  replicas: 2
   strategy:
     type: Recreate
   template:
@@ -32,6 +32,7 @@ spec:
       containers:
       - name: grafana
         image: grafana/grafana:6.2.5
+        imagePullPolicy: Always
       # - command:
       #   - /setup.sh
         env:
@@ -43,10 +44,10 @@ spec:
           value: "false"
         ports:
         - containerPort: 3000
-        # lifecycle:
-        #   postStart:
-        #     exec:
-        #       command: ["/bin/sh", "-c", "curl -i -H 'Accept: application/json' -H 'Content-Type: application/json' -X POST -k http://admin:admin@localhost:3000/api/dashboards/db --data @/etc/grafana/provisioning/dashboards/hww_app.json"]
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 30;curl -i -H 'Accept: application/json' -H 'Content-Type: application/json' -X POST -k http://admin:admin@localhost:3000/api/dashboards/db --data @/etc/grafana/provisioning/dashboards/hww_app.json"]
         resources: {}
 
         volumeMounts:
