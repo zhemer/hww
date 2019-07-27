@@ -1,4 +1,5 @@
 FROM golang:alpine
+MAINTAINER Sergey Zhemerdeev zhemers@gmail.com https://github.com/zhemer/hww/tree/master/hww
 RUN apk add curl
 COPY hww.go /
 WORKDIR /
