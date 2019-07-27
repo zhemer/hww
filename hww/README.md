@@ -1,6 +1,7 @@
 # hww - Hello World Web http server
 
 Hww is a simple http server written in Go, that gathers a container CPU usage and offers it as end points that can be used by Prometheus.
+[GitHub Repository](https://github.com/zhemer/hww/tree/master/hww).
 
 ```console
 $ ./hww -h
