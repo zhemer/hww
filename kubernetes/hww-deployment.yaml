@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: hww
-        image: hww
+        image: zhemer/hww
         imagePullPolicy: IfNotPresent
         livenessProbe:
           exec:
