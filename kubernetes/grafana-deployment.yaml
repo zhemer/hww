@@ -11,6 +11,9 @@ data:
         basicAuth: false
 metadata:
   name: cm-graf-datasource
+  labels:
+    app: grafana
+    owner: zhemer
 
 ---
 
@@ -20,6 +23,7 @@ metadata:
   name: grafana
   labels:
     app: grafana
+    owner: zhemer
 spec:
   replicas: 2
   strategy:
@@ -28,13 +32,12 @@ spec:
     metadata:
       labels:
         app: grafana
+        owner: zhemer
     spec:
       containers:
       - name: grafana
         image: grafana/grafana:6.2.5
         imagePullPolicy: Always
-      # - command:
-      #   - /setup.sh
         env:
         - name: GF_SECURITY_ADMIN_PASSWORD
           value: admin
@@ -61,9 +64,6 @@ spec:
             mountPath: /etc/grafana/provisioning/datasources/prometheus.yaml
             subPath: prometheus.yaml
 
-        # - mountPath: /var/lib/grafana
-        #   name: grafana-data
-
       restartPolicy: Always
 
       volumes:
@@ -76,10 +76,6 @@ spec:
         - name: vm-cm-graf-datasource
           configMap:
             name: cm-graf-datasource
-
-      # - name: grafana-data
-      #   persistentVolumeClaim:
-      #     claimName: grafana-data
 
 status: {}
 
@@ -261,6 +257,9 @@ data:
     }
 metadata:
   name: cm-graf-dashboard
+  labels:
+    app: grafana
+    owner: zhemer
 
 ---
 
@@ -278,3 +277,6 @@ data:
           folder: '/etc/grafana/provisioning/dashboards'
 metadata:
   name: cm-graf-dashboards
+  labels:
+    app: grafana
+    owner: zhemer

@@ -3,6 +3,7 @@ kind: Service
 metadata:
   labels:
     app: grafana
+    owner: zhemer
   name: grafana
 spec:
   ports:
@@ -11,5 +12,6 @@ spec:
     targetPort: 3000
   selector:
     app: grafana
+    owner: zhemer
 status:
   loadBalancer: {}

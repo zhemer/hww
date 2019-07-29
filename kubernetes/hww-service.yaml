@@ -3,6 +3,7 @@ kind: Service
 metadata:
   labels:
     app: hww
+    owner: zhemer
   name: hww
 spec:
   ports:

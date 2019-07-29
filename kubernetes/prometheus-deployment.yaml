@@ -19,6 +19,9 @@ data:
           - targets: ['localhost:9090']
 metadata:
   name: cm-prom
+  labels:
+    app: prometheus
+    owner: zhemer
 
 ---
 
@@ -28,6 +31,7 @@ metadata:
   name: prometheus
   labels:
     app: prometheus
+    owner: zhemer
 spec:
   replicas: 1
   strategy:
@@ -36,6 +40,7 @@ spec:
     metadata:
       labels:
         app: prometheus
+        owner: zhemer
     spec:
       containers:
       - args:
@@ -55,17 +60,10 @@ spec:
             mountPath: /etc/prometheus/prometheus.yml
             subPath: prometheus.yml
 
-#        - mountPath: /prometheus
-#          name: prometheus-data
-
       restartPolicy: Always
       volumes:
         - name: vm-cm-prom
           configMap:
             name: cm-prom
-
-#      - name: prometheus-data
-#        persistentVolumeClaim:
-#          claimName: prometheus-data
 
 status: {}

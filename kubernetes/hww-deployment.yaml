@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: hww
+    owner: zhemer
   name: hww
 spec:
   replicas: 1
@@ -11,6 +12,7 @@ spec:
     metadata:
       labels:
         app: hww
+        owner: zhemer
     spec:
       containers:
       - name: hww
