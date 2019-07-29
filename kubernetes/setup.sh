@@ -25,7 +25,7 @@ EOF
 	for app in $apps;do
 		echo kubectl apply -f "${app}-deployment.yaml"
 	done
-echo "kubectl port-forward `kubectl get pod -l app=grafana|tail -1|awk '{print $1}'` 3000:3000 --address=0.0.0.0 >/tmp/pf-graf &""
+echo "kubectl port-forward `kubectl get pod -l app=grafana|tail -1|awk '{print $1}'` 3000:3000 --address=0.0.0.0 >/tmp/pf-graf &"
 ;;
 
 -u)
