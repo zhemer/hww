@@ -49,6 +49,7 @@ spec:
         - --web.console.libraries=/etc/prometheus/console_libraries
         - --web.console.templates=/etc/prometheus/consoles
         - --storage.tsdb.retention.time=200h
+        - --storage.tsdb.retention.size=200MB
         - --web.enable-lifecycle
         image: prom/prometheus:v2.10.0
         name: prometheus
@@ -60,10 +61,17 @@ spec:
             mountPath: /etc/prometheus/prometheus.yml
             subPath: prometheus.yml
 
+          - name: vm-prom-data
+            mountPath: /prometheus
+
       restartPolicy: Always
       volumes:
         - name: vm-cm-prom
           configMap:
             name: cm-prom
+
+        - name: vm-prom-data
+          persistentVolumeClaim:
+              claimName: prometheus-pvc
 
 status: {}
