@@ -16,7 +16,7 @@ case "$1" in
 	cat << EOF
 mkdir -p $PV_PATH
 chown nobody.nogroup $PV_PATH
-kubectl apply -f pv.yaml,pvc.yaml
+kubectl apply -f sc-local-storage.yaml,pv.yaml,pvc.yaml
 EOF
 	apps='hww prometheus grafana'
 	for app in $apps;do
@@ -30,7 +30,7 @@ echo "kubectl port-forward `kubectl get pod -l app=grafana|tail -1|awk '{print $
 
 -u)
 	cat << EOF
-kubectl delete deployments,services,configmap,pv,pvc -l 'app in (hww,grafana,prometheus),owner=zhemer'
+kubectl delete deployments,services,configmap,pv,pvc,StorageClass -l 'app in (hww,grafana,prometheus,storageClass),owner=zhemer'
 rm -rf $PV_PATH
 EOF
 ;;
