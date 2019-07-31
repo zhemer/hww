@@ -1,4 +1,6 @@
-This directory contains Kubernetes version of the system. In order to install all needed deployments and packages, run:
+This directory contains Kubernetes version of the system.  
+
+In order to install all needed deployments and packages, run:
 ```console
 kubectl apply -f .
 ````
