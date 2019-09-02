@@ -2,6 +2,7 @@ This directory contains Kubernetes version of the system.
 
 In order to install all needed deployments and packages, run:
 ```console
+H=`kubectl describe node|grep hostname|awk -F= '{print $2}'`; sed -i "s/your-host/$H/" pv.yaml
 kubectl apply -f .
 ````
 
